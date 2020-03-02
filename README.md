@@ -1,4 +1,4 @@
-## Personnal Kanban application
+## Personal Kanban application
 
 build a prototype of a personal project management tool using Spring boot 2.0 in the backend, ReactJS and Redux on the front end.
 
