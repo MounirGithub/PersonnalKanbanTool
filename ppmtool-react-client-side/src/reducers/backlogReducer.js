@@ -1,7 +1,7 @@
 import {
   GET_BACKLOG,
-  DELETE_PROJECT,
-  DELETE_PROJECT_TASK
+  DELETE_PROJECT_TASK,
+  GET_PROJECT_TASK
 } from "../actions/types";
 
 const initialState = {
