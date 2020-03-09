@@ -8,7 +8,7 @@ class Backlog extends Component {
     const tasks = project_tasks_prop.map(project_task => (
       <ProjectTask key={project_task.id} project_task={project_task} />
     ));
-
+    /* task.props represente les props de chaque element */
     const filtredByStatus = (tasks, status) =>
       tasks.filter(task => task.props.project_task.status === status);
 
