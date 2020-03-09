@@ -26,6 +26,7 @@ class UpdateProject extends Component {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
     }
+
     const {
       id,
       projectName,
