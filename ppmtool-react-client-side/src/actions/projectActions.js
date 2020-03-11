@@ -1,5 +1,6 @@
 import axios from "axios";
 import { GET_ERRORS, GET_PROJECTS, GET_PROJECT, DELETE_PROJECT } from "./types";
+/* history is for redirecting */
 
 export const createProject = (project, history) => async dispatch => {
   try {
