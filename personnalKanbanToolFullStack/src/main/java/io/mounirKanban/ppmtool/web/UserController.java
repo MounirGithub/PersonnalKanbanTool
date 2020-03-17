@@ -1,12 +1,20 @@
 package io.mounirKanban.ppmtool.web;
 
 import io.mounirKanban.ppmtool.domain.User;
+import io.mounirKanban.ppmtool.payload.JWTLoginSucessReponse;
+import io.mounirKanban.ppmtool.payload.LoginRequest;
+import io.mounirKanban.ppmtool.security.JwtTokenProvider;
+import io.mounirKanban.ppmtool.security.SecurityConstants;
 import io.mounirKanban.ppmtool.services.MapValidationErrorService;
 import io.mounirKanban.ppmtool.services.UserService;
 import io.mounirKanban.ppmtool.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,6 +36,31 @@ public class UserController {
     @Autowired
     private UserValidator userValidator;
 
+    @Autowired
+    private JwtTokenProvider tokenProvider;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+
+
+    @PostMapping("/login")
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, BindingResult result){
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationErrorService(result);
+        if(errorMap != null) return errorMap;
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getUsername(),
+                        loginRequest.getPassword()
+                )
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = SecurityConstants.TOKEN_PREFIX +  tokenProvider.generateToken(authentication);
+
+        return ResponseEntity.ok(new JWTLoginSucessReponse(true, jwt));
+    }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody User user, BindingResult result){
