@@ -4,6 +4,7 @@ import io.mounirKanban.ppmtool.domain.Backlog;
 import io.mounirKanban.ppmtool.domain.Project;
 import io.mounirKanban.ppmtool.domain.User;
 import io.mounirKanban.ppmtool.exceptions.ProjectIdException;
+import io.mounirKanban.ppmtool.exceptions.ProjectNotFoundException;
 import io.mounirKanban.ppmtool.repositories.BacklogRepository;
 import io.mounirKanban.ppmtool.repositories.ProjectRepository;
 import io.mounirKanban.ppmtool.repositories.UserRepository;
@@ -49,7 +50,7 @@ public class ProjectService {
     }
 
 
-    public Project findProjectByIdentifier(String projectId){
+    public Project findProjectByIdentifier(String projectId, String username){
 
         //Only want to return the project if the user looking for it is the owner
 
@@ -60,23 +61,24 @@ public class ProjectService {
 
         }
 
+        if(!project.getProjectLeader().equals(username)){
+            throw new ProjectNotFoundException("Project not found in your account");
+        }
+
+
 
         return project;
     }
 
-    public Iterable<Project> findAllProjects(){
-        return projectRepository.findAll();
+    public Iterable<Project> findAllProjects(String username){
+        return projectRepository.findAllByProjectLeader(username);
     }
 
 
-    public void deleteProjectByIdentifier(String projectid){
-        Project project = projectRepository.findByProjectIdentifier(projectid.toUpperCase());
+    public void deleteProjectByIdentifier(String projectid, String username){
 
-        if(project == null){
-            throw  new  ProjectIdException("Cannot Project with ID '"+projectid+"'. This project does not exist");
-        }
 
-        projectRepository.delete(project);
+        projectRepository.delete(findProjectByIdentifier(projectid, username));
     }
 
 }
