@@ -13,12 +13,12 @@ class ProjectBoard extends Component {
       errors: {}
     };
   }
+
   componentDidMount() {
     const { id } = this.props.match.params;
     this.props.getBacklog(id);
   }
 
-  //handle errors when changing ID
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
@@ -34,10 +34,17 @@ class ProjectBoard extends Component {
 
     const boardAlgorithm = (errors, project_tasks) => {
       if (project_tasks.length < 1) {
+        //PROJECT IDENTIFIER BUG
         if (errors.projectNotFound) {
           return (
             <div className="alert alert-danger text-center" role="alert">
               {errors.projectNotFound}
+            </div>
+          );
+        } else if (errors.projectIdentifier) {
+          return (
+            <div className="alert alert-danger text-center" role="alert">
+              {errors.projectIdentifier}
             </div>
           );
         } else {
@@ -66,6 +73,7 @@ class ProjectBoard extends Component {
     );
   }
 }
+
 ProjectBoard.propTypes = {
   backlog: PropTypes.object.isRequired,
   getBacklog: PropTypes.func.isRequired,

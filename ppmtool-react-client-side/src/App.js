@@ -9,16 +9,16 @@ import { Provider } from "react-redux";
 import store from "./store";
 import UpdateProject from "./components/Project/UpdateProject";
 import ProjectBoard from "./components/ProjectBoard/ProjectBoard";
+import AddProjectTask from "./components/ProjectBoard/ProjectTask/AddProjectTask";
+import UpdateProjectTask from "./components/ProjectBoard/ProjectTask/UpdateProjectTask";
 import Landing from "./components/Layout/Landing";
+import Register from "./components/userManagement/Register";
+import Login from "./components/userManagement/Login";
 import jwt_decode from "jwt-decode";
 import setJWTToken from "./securityUtils/setJWTToken";
 import { SET_CURRENT_USER } from "./actions/types";
 import { logout } from "./actions/securityAction";
 import SecuredRoute from "./securityUtils/SecureRoute";
-import Login from "./components/userManagement/Login";
-import Register from "./components/userManagement/Register";
-
-import { addProjectTask, updateProjectTask } from "./actions/backlogActions";
 
 const jwtToken = localStorage.jwtToken;
 
@@ -71,12 +71,12 @@ class App extends Component {
               <SecuredRoute
                 exact
                 path="/addProjectTask/:id"
-                component={addProjectTask}
+                component={AddProjectTask}
               />
               <SecuredRoute
                 exact
                 path="/updateProjectTask/:backlog_id/:pt_id"
-                component={updateProjectTask}
+                component={UpdateProjectTask}
               />
             </Switch>
           </div>
